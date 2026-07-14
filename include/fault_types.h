@@ -1,0 +1,21 @@
+#pragma once
+
+enum class FaultType
+{
+    NONE,
+
+    SENSOR_STUCK,
+    SENSOR_OUT_OF_RANGE,
+    SENSOR_IMPLAUSIBLE,
+
+    PUMP_FAILURE,
+    FAN_FAILURE,
+
+    COOLING_INEFFECTIVE,
+
+    THERMAL_IMBALANCE,
+
+    WATCHDOG_TIMEOUT,
+
+    OVER_TEMPERATURE
+};

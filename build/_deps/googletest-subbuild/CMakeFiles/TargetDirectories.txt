@@ -1,0 +1,3 @@
+C:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller/build/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
+C:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller/build/_deps/googletest-subbuild/CMakeFiles/ALL_BUILD.dir
+C:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller/build/_deps/googletest-subbuild/CMakeFiles/ZERO_CHECK.dir

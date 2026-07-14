@@ -1,0 +1,4 @@
+targetTemp=35.0
+normalThreshold=40.0
+criticalThreshold=50.0
+safeThreshold=55.0

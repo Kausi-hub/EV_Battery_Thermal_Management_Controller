@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\SingurK\Documents\Data\Personal\Apps\git_repo\EV_Battery_Thermal_Management_Controller\build\_deps\googletest-subbuild\CMakeFiles\1d7cc033c248781be85ae5044d446916\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{FA0B9A63-DD0C-3016-9AC2-7337A9E7F24F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

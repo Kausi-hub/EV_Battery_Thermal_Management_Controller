@@ -1,0 +1,11 @@
+Checks: >
+  *,
+  -fuchsia-*,
+  -llvm-*,
+  -google-runtime-references
+
+WarningsAsErrors: '*'
+
+HeaderFilterRegex: '.*'
+
+FormatStyle: file

@@ -1,0 +1,10 @@
+^C:\USERS\SINGURK\DOCUMENTS\DATA\PERSONAL\APPS\GIT_REPO\EV_BATTERY_THERMAL_MANAGEMENT_CONTROLLER\BUILD\_DEPS\GOOGLETEST-SRC\GOOGLEMOCK\CMAKELISTS.TXT
+setlocal
+"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller -BC:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller/build --check-stamp-file C:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller/build/_deps/googletest-build/googlemock/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

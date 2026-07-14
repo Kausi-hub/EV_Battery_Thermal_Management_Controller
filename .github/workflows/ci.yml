@@ -1,0 +1,71 @@
+name: Battery Thermal Controller CI
+
+on:
+
+  push:
+
+  pull_request:
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v4
+
+    - name: Install Tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          cmake \
+          g++ \
+          gcovr \
+          cppcheck \
+          clang-tidy
+
+    - name: Configure
+      run: |
+        cmake \
+          -B build \
+          -DENABLE_COVERAGE=ON
+
+    - name: Build
+      run: |
+        cmake \
+          --build build
+
+    - name: Run Unit Tests
+      run: |
+        ctest \
+          --test-dir build \
+          --output-on-failure
+
+    - name: Coverage
+      run: |
+        gcovr \
+          -r . \
+          --xml \
+          -o coverage.xml
+
+    - name: Cppcheck
+      run: |
+        cppcheck \
+          --enable=all \
+          --std=c++17 \
+          --error-exitcode=1 \
+          src include
+
+    - name: Clang Tidy
+      run: |
+        find src -name '*.cpp' \
+        | xargs clang-tidy \
+          -p build
+
+    - name: Upload Coverage
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage
+        path: coverage.xml

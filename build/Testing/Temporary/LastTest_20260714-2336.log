@@ -1,0 +1,30 @@
+Start testing: Jul 14 19:37 Eastern Daylight Time
+----------------------------------------------------------
+5/9 Testing: ThermalController.SafeModeCommandsFullCooling
+5/9 Test: ThermalController.SafeModeCommandsFullCooling
+Command: "C:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller/build/Debug/thermal_tests.exe" "--gtest_filter=ThermalController.SafeModeCommandsFullCooling" "--gtest_also_run_disabled_tests"
+Directory: C:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller/build
+"ThermalController.SafeModeCommandsFullCooling" start time: Jul 14 19:37 Eastern Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\SingurK\Documents\Data\Personal\Apps\git_repo\EV_Battery_Thermal_Management_Controller\build\_deps\googletest-src\googletest\src\gtest_main.cc
+Note: Google Test filter = ThermalController.SafeModeCommandsFullCooling
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from ThermalController
+[ RUN      ] ThermalController.SafeModeCommandsFullCooling
+[       OK ] ThermalController.SafeModeCommandsFullCooling (0 ms)
+[----------] 1 test from ThermalController (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"ThermalController.SafeModeCommandsFullCooling" end time: Jul 14 19:37 Eastern Daylight Time
+"ThermalController.SafeModeCommandsFullCooling" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Jul 14 19:37 Eastern Daylight Time

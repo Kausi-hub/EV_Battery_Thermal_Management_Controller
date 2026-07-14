@@ -1,0 +1,5 @@
+if(EXISTS "C:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller/build/thermal_tests[1]_tests.cmake")
+  include("C:/Users/SingurK/Documents/Data/Personal/Apps/git_repo/EV_Battery_Thermal_Management_Controller/build/thermal_tests[1]_tests.cmake")
+else()
+  add_test(thermal_tests_NOT_BUILT thermal_tests_NOT_BUILT)
+endif()
