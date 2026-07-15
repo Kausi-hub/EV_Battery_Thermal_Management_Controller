@@ -1,6 +1,7 @@
 # EV_Battery_Thermal_Management_Controller
-EV thermal management
-System Architecture
+## EV thermal management
+### System Architecture
+```
 ┌─────────────────────────────────────────────────────┐
 │                 Vehicle Network Layer               │
 ├─────────────────────────────────────────────────────┤
@@ -41,13 +42,14 @@ System Architecture
       Sensors              Battery Model
       Pump                 Coolant Loop
       Fan                  Environment Model
-
+```
 Rx data: Battery Current, Battery Voltage, Vehicle Speed, Ambient Temperature, Charging Status
 Tx data: Battery Temperature
 Coolant Temperature, Pump Command, Fan Command, Active Faults, Health Status
 Ethernet Interface: Telemetry Streaming, Cloud Analytics, High-Speed Logging
 
-System functional architecture:
+#### System functional architecture:
+```
 EV Battery Thermal Management System
 │
 ├── Thermal Sensing
@@ -96,8 +98,9 @@ EV Battery Thermal Management System
     ├── Cooling Performance
     ├── Fault Plots
     └── System Metrics
+```
 
-Context Diagram:
+#### Context Diagram:
                      ┌───────────────┐
                      │      Cloud    │
                      └───────┬───────┘
@@ -130,7 +133,7 @@ FUSA architecture:
                            ▼
                      Safe State
 
-FUSA layer architecture:
+#### FUSA layer architecture:
 Sensors
    │
    ▼
