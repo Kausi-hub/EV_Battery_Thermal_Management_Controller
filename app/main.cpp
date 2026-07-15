@@ -12,6 +12,8 @@
 #include "fault_types.h"
 #include "thermal_controller.h"
 #include "watchdog.h"
+#include "telemetry_logger.h"
+#include "telemetry_record.h"
 
 // Temporary fan implementation
 class FanDriver : public IFanDriver
@@ -56,19 +58,13 @@ int main()
 
     uint32_t timeMs = 0;
 
-    for (int cycle = 0;
-         cycle < 600;
-         ++cycle)
+    TelemetryLogger logger("telemetry.csv");
+
+    for (int cycle = 0; cycle < 600; ++cycle)
     {
         watchdog.kick(timeMs);
-
-        float current =
-            (cycle > 200)
-                ? 320.0f
-                : 100.0f;
-
+        float current = (cycle > 200) ? 320.0f : 100.0f;
         ThermalInputs inputs;
-
         inputs.zoneTempsC =
         {
             batteryTemp,
@@ -80,16 +76,11 @@ int main()
         inputs.coolantTempC = coolantTemp;
         inputs.batteryCurrentA = current;
 
-        inputs.pumpRpmFeedback =
-            pump.getRpm();
+        inputs.pumpRpmFeedback = pump.getRpm();
 
-        inputs.fanRpmFeedback =
-            fan.getRpm();
+        inputs.fanRpmFeedback = fan.getRpm();
 
-        auto commands =
-            controller.update(
-                inputs,
-                0.1f);
+        auto commands = controller.update(inputs,0.1f);
 
         float averageBatteryTemp =
             (inputs.zoneTempsC[0] +
@@ -110,13 +101,8 @@ int main()
             0.02f *
             0.0002f;
 
-        float heatRemoval =
-            (batteryTemp - coolantTemp) *
-            commands.pumpPercent *
-            0.0005f;
-
-        batteryTemp +=
-            (heatGeneration - heatRemoval);
+        float heatRemoval = (batteryTemp - coolantTemp) * commands.pumpPercent * 0.0005f;
+        batteryTemp += (heatGeneration - heatRemoval);
 
         auto fault =
             diagnostics.evaluate(
@@ -143,6 +129,18 @@ int main()
             controller.enterSafeMode();
         }
 
+        TelemetryRecord record;
+        record.timestampMs = timeMs;
+        record.zoneTemps = inputs.zoneTempsC;
+        record.coolantTemp = coolantTemp;
+        record.batteryCurrent = current;
+        record.pumpCommand = commands.pumpPercent;
+        record.fanCommand = commands.fanPercent;
+        record.pumpRpm = pump.getRpm();
+        record.fanRpm = fan.getRpm();
+        record.fault = fault;
+        logger.log(record);
+
         std::cout
             << cycle
             << ","
@@ -153,6 +151,7 @@ int main()
             << commands.pumpPercent
             << ","
             << commands.fanPercent
+            << "Writing telemetry..."
             << std::endl;
 
         timeMs += 100;

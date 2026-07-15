@@ -47,6 +47,7 @@ set(SOURCES
     src/fault_manager.cpp
     src/PumpDriver.cpp
     src/BatteryTemperatureSensor.cpp
+    src/telemetry_logger.cpp
 )
 
 add_library(
