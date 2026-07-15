@@ -101,6 +101,7 @@ EV Battery Thermal Management System
 ```
 
 #### Context Diagram:
+```
                      ┌───────────────┐
                      │      Cloud    │
                      └───────┬───────┘
@@ -121,8 +122,9 @@ EV Battery Thermal Management System
                       │
                       ▼
                  Battery Pack
-
+```
 FUSA architecture:
+```
                      Safety Manager
                            │
        ┌───────────────────┼───────────────────┐
@@ -132,8 +134,9 @@ FUSA architecture:
        └───────────────────┼───────────────────┘
                            ▼
                      Safe State
-
+```
 #### FUSA layer architecture:
+```
 Sensors
    │
    ▼
@@ -144,9 +147,10 @@ Thermal Controller
    │
    ▼
 Pump/Fan
-
-Safety goals: 
-Normal operating conditions:
+```
+#### Safety goals: 
+**Normal operating conditions:**
+```
 Sensors
    │
    ▼
@@ -157,9 +161,10 @@ Thermal Controller
    │
    ▼
 Pump/Fan
-
-Battery overheating - Mitigation: Fan Enable, Pump Enable, Reduced Power, Safe Shutdown
-Failed pump - Mitigation: Fallback Cooling Mode, DTC Storage, Warning Message
+```
+**Battery overheating - Mitigation: Fan Enable, Pump Enable, Reduced Power, Safe Shutdown**
+**Failed pump - Mitigation: Fallback Cooling Mode, DTC Storage, Warning Message**
+```
 Pump Command > 50%
   │
   ▼
@@ -176,8 +181,9 @@ Fault Manager
   │
   ▼
 Vehicle Thermal Derating
-
-Sensor failure - Mitigation: Use redundant sensor, Enter degraded mode
+```
+**Sensor failure - Mitigation: Use redundant sensor, Enter degraded mode**
+```
 Sensor
   │
   ▼
@@ -192,8 +198,9 @@ Safe Mode
   ├── Pump = 100%
   ├── Fan  = 100%
   └── Fault Logged
-
-watchdog failure:
+```
+**watchdog failure:**
+```
 Controller Task Stops
        │
        ▼
@@ -208,9 +215,10 @@ Emergency Safe State
        ├── Pump = 100%
        ├── Fan = 100%
        └── Controller Disabled
+```
 
-
-Software Architecture:
+## Software Architecture:
+```
 +------------------------------------------------+
 | Application Layer                              |
 |------------------------------------------------|
@@ -237,9 +245,10 @@ Software Architecture:
 +------------------------------------------------+
 | Hardware                                       |
 +------------------------------------------------+
-
-Class Diagrams:
-Thermal control module:
+```
+### Class Diagrams:
+#### Thermal control module:
+```
 +------------------+
 | ThermalController|
 +------------------+
@@ -265,8 +274,9 @@ Thermal control module:
 | pumpPercent           |
 | fanPercent            |
 +-----------------------+
-
-Diagnostics module:
+```
+#### Diagnostics module:
+```
 +----------------------+
 | Diagnostics          |
 +----------------------+
@@ -292,8 +302,9 @@ Diagnostics module:
 | THERMAL_IMBALANCE    |
 | OVER_TEMPERATURE     |
 +----------------------+
-
-Telemetry module:
+```
+#### Telemetry module:
+```
 +----------------------+
 | TelemetryLogger      |
 +----------------------+
@@ -315,8 +326,9 @@ Telemetry module:
 | fanRpm             |
 | fault              |
 +----------------------+
-
-Simulation module:
+```
+#### Simulation module:
+```
 +----------------------+
 | CoolantModel         |
 +----------------------+
@@ -335,8 +347,9 @@ Simulation module:
 | generateHeat()      |
 | updateTemp()        |
 +----------------------+
-
-Comms module:
+```
+#### Comms module:
+```
 +----------------------+
 | CanManager           |
 +----------------------+
@@ -355,8 +368,9 @@ Comms module:
 | dlc                 |
 | data[64]            |
 +----------------------+
-
-Safety module:
+```
+#### Safety module:
+```
 +----------------------+
 | Watchdog             |
 +----------------------+
@@ -375,8 +389,9 @@ Safety module:
 | evaluate()          |
 | clearFaults()       |
 +----------------------+
-
-System - Data flow:
+```
+### System - Data flow:
+```
 Temperature Sensors
         │
         ▼
@@ -406,8 +421,10 @@ Temperature Sensors
         │
         ▼
  Temperature/Fault Dashboards
-
- Thermal controls:
+```
+### Sequence Diagrams:
+#### Thermal controls:
+ ```
  BatterySensor    Controller    PumpDriver   FanDriver   CoolantModel
 
      │               │             │           │            │
@@ -428,8 +445,9 @@ Temperature Sensors
      │               │             │           │            │
      │               │◄─────────────────────────────────────┤
      │               │ Coolant Temp                        │
-
-Fault detection:
+```
+#### Fault detection:
+```
 Sensor       Diagnostics      FaultManager      Controller
 
   │                │                │               │
@@ -445,8 +463,10 @@ Sensor       Diagnostics      FaultManager      Controller
   │                │                │ Safe Mode     │
   │                │                ├──────────────►│
   │                │                │               │
+```
+#### Telemetry:
 
-  Telemetry:
+  ```
   Main Loop     TelemetryRecord    TelemetryLogger      CSV File
 
     │                 │                 │               │
@@ -459,8 +479,9 @@ Sensor       Diagnostics      FaultManager      Controller
     │                 │                 ├──────────────►│
     │                 │                 │ Write CSV     │
     │                 │                 │               │
-
-CAN:
+```
+#### CAN:
+```
 BMS                CAN Driver          Thermal ECU
 
  │                     │                    │
@@ -471,8 +492,10 @@ BMS                CAN Driver          Thermal ECU
  │                     │                    │
  │                     │  Update Inputs     │
  │                     │                    │
+```
+#### Sartup:
 
- Sartup:
+```
  main()
  │
  ▼
@@ -498,3 +521,4 @@ Initialize Telemetry
  │
  ▼
 Start Control Loop
+```
