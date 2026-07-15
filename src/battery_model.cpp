@@ -2,7 +2,7 @@
 #include <cstddef>
 
 BatteryModel::ZoneData BatteryModel::update(
-    const std::array<float, BatteryModel::NumZones>& currents,
+    const std::array<float, BatteryModel::kNumZones>& currents,
     float coolantTemp,
     float pumpPercent,
     float dt)
@@ -10,7 +10,7 @@ BatteryModel::ZoneData BatteryModel::update(
     constexpr float resistance = 0.02f;
     static constexpr std::size_t NumZones = 4;
 
-    for(std::size_t i = 0; i < BatteryModel::NumZones; ++i)
+    for(std::size_t i = 0; i < BatteryModel::kNumZones; ++i)
     {
         float heatGen = currents[i] * currents[i] * resistance * 0.0002f;
         float cooling = (m_zoneData.temps[i] - coolantTemp) * pumpPercent * 0.0005f;

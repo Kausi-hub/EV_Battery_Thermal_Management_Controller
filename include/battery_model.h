@@ -7,15 +7,15 @@ class BatteryModel
 {
 public:
 
-    static constexpr std::size_t NumZones = 4;
+    static constexpr std::size_t kNumZones = 4;
 
     struct ZoneData
     {
-        std::array<float, NumZones> temps;
+        std::array<float, kNumZones> temps;
     };
 
     ZoneData update(
-        const std::array<float, NumZones>& currents,
+        const std::array<float, kNumZones>& currents,
         float coolantTemp,
         float pumpPercent,
         float dt);

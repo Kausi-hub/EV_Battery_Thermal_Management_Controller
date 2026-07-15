@@ -1,5 +1,4 @@
 #include "diagnostics.h"
-
 #include <algorithm>
 #include <cmath>
 
