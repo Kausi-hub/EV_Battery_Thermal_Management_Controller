@@ -1,4 +1,5 @@
 #include "telemetry_logger.h"
+#include <cstdint>
 
 TelemetryLogger::TelemetryLogger(
     const std::string& filename)

@@ -2,6 +2,7 @@
 
 #include <array>
 #include <string>
+#include<cstdint>
 
 #include "fault_types.h"
 
