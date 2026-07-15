@@ -91,12 +91,17 @@ TEST(Diagnostics, CoolingIneffective)
 {
     Diagnostics diagnostics;
 
+    bool result = false;
+
+    for(int i =0; i<301; ++i){
+
     EXPECT_TRUE(
         diagnostics.checkCoolingIneffective(
             45.0f,
             44.0f,
             3500.0f,
             2500.0f));
+    }
 }
 
 TEST(Diagnostics, PumpHealthy)
