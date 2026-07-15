@@ -225,6 +225,7 @@ FaultType Diagnostics::evaluate(
 
     if(checkCoolingIneffective(
         maxTemp,
+        m_previousMaxTemp,
         pumpRpm,
         fanRpm))
     {
