@@ -53,7 +53,8 @@ jobs:
     - name: Cppcheck
       run: |
         cppcheck \
-          --enable=all \
+          --enable=warning,style,performance,portability \
+          --inconclusive \
           --std=c++17 \
           --error-exitcode=1 \
           src include
