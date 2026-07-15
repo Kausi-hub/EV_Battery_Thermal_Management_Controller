@@ -55,6 +55,7 @@ jobs:
         cppcheck \
           --enable=warning,style,performance,portability \
           --inconclusive \
+          --error-exitcode=1 \
           --std=c++17 \
           --error-exitcode=1 \
           src include

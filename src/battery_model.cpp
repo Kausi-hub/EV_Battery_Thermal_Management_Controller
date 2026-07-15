@@ -8,7 +8,7 @@ BatteryModel::ZoneData BatteryModel::update(
     float dt)
 {
     constexpr float resistance = 0.02f;
-    static constexpr std::size_t kNumZones = 4;
+    //static constexpr std::size_t kNumZones = 4;
 
     for(std::size_t i = 0; i < BatteryModel::kNumZones; ++i)
     {
