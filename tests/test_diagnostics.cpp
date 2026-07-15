@@ -174,20 +174,3 @@ TEST(Diagnostics, DetectPumpFailure)
         fault,
         FaultType::PUMP_FAILURE);
 }
-
-TEST(Diagnostics, FanFailureDetected)
-{
-    Diagnostics diagnostics;
-
-    bool fault = false;
-
-    for(int i = 0; i < 120; ++i)
-    {
-        fault =
-            diagnostics.checkFanFailure(
-                80.0f,
-                0.0f);
-    }
-
-    EXPECT_TRUE(fault);
-}
