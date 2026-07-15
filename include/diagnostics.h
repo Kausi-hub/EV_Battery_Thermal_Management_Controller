@@ -10,17 +10,6 @@ public:
 
     Diagnostics();
 
-    FaultType evaluate(
-        const std::array<float,4>& zoneTemps,
-        float coolantTemp,
-        float pumpCommand,
-        float fanCommand,
-        float pumpRpm,
-        float fanRpm,
-        float dt);
-
-private:
-
     bool checkRange(
         const std::array<float,4>& zoneTemps);
 
@@ -44,6 +33,15 @@ private:
 
     bool checkThermalImbalance(
         const std::array<float,4>& zoneTemps);
+
+    FaultType evaluate(
+        const std::array<float,4>& zoneTemps,
+        float coolantTemp,
+        float pumpCommand,
+        float fanCommand,
+        float pumpRpm,
+        float fanRpm,
+        float dt);
 
 private:
 

@@ -26,72 +26,6 @@ m_coolingCounter(0)
 {
 }
 
-FaultType Diagnostics::evaluate(
-    const std::array<float,4>& zoneTemps,
-    float coolantTemp,
-    float pumpCommand,
-    float fanCommand,
-    float pumpRpm,
-    float fanRpm,
-    float dt)
-{
-    float maxTemp =
-        *std::max_element(
-            zoneTemps.begin(),
-            zoneTemps.end());
-
-    if(checkRange(zoneTemps))
-    {
-        return FaultType::SENSOR_OUT_OF_RANGE;
-    }
-
-    if(checkPlausibility(
-        zoneTemps,
-        coolantTemp,
-        dt))
-    {
-        return FaultType::SENSOR_IMPLAUSIBLE;
-    }
-
-    if(checkThermalImbalance(
-        zoneTemps))
-    {
-        return FaultType::THERMAL_IMBALANCE;
-    }
-
-    if(checkPumpFailure(
-        pumpCommand,
-        pumpRpm))
-    {
-        return FaultType::PUMP_FAILURE;
-    }
-
-    if(checkFanFailure(
-        fanCommand,
-        fanRpm))
-    {
-        return FaultType::FAN_FAILURE;
-    }
-
-    if(checkCoolingIneffective(
-        maxTemp,
-        pumpRpm,
-        fanRpm))
-    {
-        return FaultType::COOLING_INEFFECTIVE;
-    }
-
-    if(maxTemp > 55.0f)
-    {
-        return FaultType::OVER_TEMPERATURE;
-    }
-
-    m_previousMaxTemp = maxTemp;
-    m_firstCycle = false;
-
-    return FaultType::NONE;
-}
-
 bool Diagnostics::checkRange(
     const std::array<float,4>& zoneTemps)
 {
@@ -257,4 +191,70 @@ bool Diagnostics::checkCoolingIneffective(
     return
         m_coolingCounter
         > COOLING_LIMIT;
+}
+
+FaultType Diagnostics::evaluate(
+    const std::array<float,4>& zoneTemps,
+    float coolantTemp,
+    float pumpCommand,
+    float fanCommand,
+    float pumpRpm,
+    float fanRpm,
+    float dt)
+{
+    float maxTemp =
+        *std::max_element(
+            zoneTemps.begin(),
+            zoneTemps.end());
+
+    if(checkRange(zoneTemps))
+    {
+        return FaultType::SENSOR_OUT_OF_RANGE;
+    }
+
+    if(checkPlausibility(
+        zoneTemps,
+        coolantTemp,
+        dt))
+    {
+        return FaultType::SENSOR_IMPLAUSIBLE;
+    }
+
+    if(checkThermalImbalance(
+        zoneTemps))
+    {
+        return FaultType::THERMAL_IMBALANCE;
+    }
+
+    if(checkPumpFailure(
+        pumpCommand,
+        pumpRpm))
+    {
+        return FaultType::PUMP_FAILURE;
+    }
+
+    if(checkFanFailure(
+        fanCommand,
+        fanRpm))
+    {
+        return FaultType::FAN_FAILURE;
+    }
+
+    if(checkCoolingIneffective(
+        maxTemp,
+        pumpRpm,
+        fanRpm))
+    {
+        return FaultType::COOLING_INEFFECTIVE;
+    }
+
+    if(maxTemp > 55.0f)
+    {
+        return FaultType::OVER_TEMPERATURE;
+    }
+
+    m_previousMaxTemp = maxTemp;
+    m_firstCycle = false;
+
+    return FaultType::NONE;
 }

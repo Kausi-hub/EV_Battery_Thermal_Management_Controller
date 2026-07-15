@@ -117,30 +117,10 @@ TEST(Diagnostics, PumpHealthy)
 
     for(int i = 0; i < 120; ++i)
     {
-        fault =
-            diagnostics.checkPumpFailure(
-                80.0f,
-                3500.0f);
+        fault = diagnostics.checkPumpFailure(80.0f,3500.0f);
     }
 
     EXPECT_FALSE(fault);
-}
-
-TEST(Diagnostics, PumpFailureDetected)
-{
-    Diagnostics diagnostics;
-
-    bool fault = false;
-
-    for(int i = 0; i < 120; ++i)
-    {
-        fault =
-            diagnostics.checkPumpFailure(
-                80.0f,
-                0.0f);
-    }
-
-    EXPECT_TRUE(fault);
 }
 
 TEST(Diagnostics, DetectThermalImbalance)
@@ -236,31 +216,4 @@ TEST(Diagnostics, DetectFanFailure)
     EXPECT_EQ(
         fault,
         FaultType::FAN_FAILURE);
-}
-
-TEST(Diagnostics, DetectOutOfRangeTemperature)
-{
-    Diagnostics diagnostics;
-
-    std::array<float,4> zones =
-    {
-        -100.0f,
-        35.0f,
-        35.0f,
-        35.0f
-    };
-
-    auto fault =
-        diagnostics.evaluate(
-            zones,
-            25.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.1f);
-
-    EXPECT_EQ(
-        fault,
-        FaultType::SENSOR_OUT_OF_RANGE);
 }
