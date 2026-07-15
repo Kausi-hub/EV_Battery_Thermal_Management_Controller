@@ -58,6 +58,13 @@ add_executable(
     thermal_controller
     app/main.cpp)
 
+add_custom_command(
+    TARGET thermal_controller POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    ${CMAKE_SOURCE_DIR}/thermal_calibration.txt
+    $<TARGET_FILE_DIR:thermal_controller>
+)
+
 target_link_libraries(
     thermal_controller
     thermal_lib)

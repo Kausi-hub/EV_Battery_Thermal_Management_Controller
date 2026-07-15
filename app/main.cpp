@@ -1,6 +1,7 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include <filesystem>
 
 #include "BatteryTemperatureSensor.h"
 #include "ConfigLoader.h"
@@ -55,10 +56,16 @@ int main()
 
     float batteryTemp = 35.0f;
     float coolantTemp = 25.0f;
+    constexpr float thermalMass = 1500.0f;
 
     uint32_t timeMs = 0;
 
     TelemetryLogger logger("telemetry.csv");
+
+    if (!std::filesystem::exists("telemetry.csv"))
+    {
+        std::cout << "Telemetry file not found after open()" << std::endl;
+    }
 
     for (int cycle = 0; cycle < 600; ++cycle)
     {
@@ -82,6 +89,9 @@ int main()
 
         auto commands = controller.update(inputs,0.1f);
 
+        pump.setSpeed(commands.pumpPercent);
+        fan.setSpeed(commands.fanPercent);
+
         float averageBatteryTemp =
             (inputs.zoneTempsC[0] +
              inputs.zoneTempsC[1] +
@@ -102,7 +112,7 @@ int main()
             0.0002f;
 
         float heatRemoval = (batteryTemp - coolantTemp) * commands.pumpPercent * 0.0005f;
-        batteryTemp += (heatGeneration - heatRemoval);
+        batteryTemp += (heatGeneration - heatRemoval) * 0.1 /thermalMass;
 
         auto fault =
             diagnostics.evaluate(
@@ -151,7 +161,8 @@ int main()
             << commands.pumpPercent
             << ","
             << commands.fanPercent
-            << "Writing telemetry..."
+            << "pumpRpm=" << pump.getRpm()
+            << ",fanRpm=" << fan.getRpm()
             << std::endl;
 
         timeMs += 100;

@@ -7,10 +7,10 @@ namespace
 constexpr float MIN_VALID_TEMP = -40.0f;
 constexpr float MAX_VALID_TEMP = 120.0f;
 constexpr float MAX_SENSOR_DELTA = 60.0f;
-constexpr float MAX_TEMP_RATE = 5.0f;      // C/sec
+constexpr float MAX_TEMP_RATE = 20.0f;      // C/sec
 constexpr float MAX_ZONE_DELTA = 20.0f;
-constexpr float STUCK_EPSILON = 0.05f;
-constexpr int STUCK_LIMIT = 50;
+constexpr float STUCK_EPSILON = 0.0001f;
+constexpr int STUCK_LIMIT = 300;
 constexpr int FEEDBACK_LIMIT = 100;
 constexpr int COOLING_LIMIT = 300;
 }
@@ -25,13 +25,11 @@ m_coolingCounter(0)
 {
 }
 
-bool Diagnostics::checkRange(
-    const std::array<float,4>& zoneTemps)
+bool Diagnostics::checkRange(const std::array<float,4>& zoneTemps)
 {
     for (float temp : zoneTemps)
     {
-        if (temp < MIN_VALID_TEMP ||
-            temp > MAX_VALID_TEMP)
+        if (temp < MIN_VALID_TEMP || temp > MAX_VALID_TEMP)
         {
             return true;
         }
@@ -40,18 +38,11 @@ bool Diagnostics::checkRange(
     return false;
 }
 
-bool Diagnostics::checkPlausibility(
-    const std::array<float,4>& zoneTemps,
-    float coolantTemp,
-    float dt)
+bool Diagnostics::checkPlausibility(const std::array<float,4>& zoneTemps, float coolantTemp, float dt)
 {
-    float maxTemp =
-        *std::max_element(
-            zoneTemps.begin(),
-            zoneTemps.end());
+    float maxTemp = *std::max_element(zoneTemps.begin(), zoneTemps.end());
 
-    if(std::fabs(maxTemp - coolantTemp)
-       > MAX_SENSOR_DELTA)
+    if(std::fabs(maxTemp - coolantTemp) > MAX_SENSOR_DELTA)
     {
         return true;
     }
@@ -61,19 +52,14 @@ bool Diagnostics::checkPlausibility(
         return false;
     }
 
-    float rate =
-        (maxTemp - m_previousMaxTemp)
-        / dt;
+    float rate = (maxTemp - m_previousMaxTemp) / dt;
 
-    if(std::fabs(rate)
-       > MAX_TEMP_RATE)
+    if(std::fabs(rate) > MAX_TEMP_RATE)
     {
         return true;
     }
 
-    if(std::fabs(
-       maxTemp - m_previousMaxTemp)
-       < STUCK_EPSILON)
+    if(std::fabs(maxTemp - m_previousMaxTemp) < STUCK_EPSILON)
     {
         m_stuckCounter++;
     }
@@ -93,29 +79,17 @@ bool Diagnostics::checkPlausibility(
 bool Diagnostics::checkThermalImbalance(
     const std::array<float,4>& zoneTemps)
 {
-    float minTemp =
-        *std::min_element(
-            zoneTemps.begin(),
-            zoneTemps.end());
+    float minTemp = *std::min_element(zoneTemps.begin(), zoneTemps.end());
 
-    float maxTemp =
-        *std::max_element(
-            zoneTemps.begin(),
-            zoneTemps.end());
+    float maxTemp = *std::max_element(zoneTemps.begin(), zoneTemps.end());
 
     return
-        (maxTemp - minTemp)
-        > MAX_ZONE_DELTA;
+        (maxTemp - minTemp) > MAX_ZONE_DELTA;
 }
 
-bool Diagnostics::checkPumpFailure(
-    float pumpCommand,
-    float pumpRpm)
+bool Diagnostics::checkPumpFailure(float pumpCommand, float pumpRpm)
 {
-    bool faultCondition =
-        (pumpCommand > 50.0f)
-        &&
-        (pumpRpm < 1000.0f);
+    bool faultCondition = (pumpCommand > 50.0f) && (pumpRpm < 1000.0f);
 
     if(faultCondition)
     {
@@ -127,18 +101,12 @@ bool Diagnostics::checkPumpFailure(
     }
 
     return
-        m_pumpFaultCounter
-        > FEEDBACK_LIMIT;
+        m_pumpFaultCounter > FEEDBACK_LIMIT;
 }
 
-bool Diagnostics::checkFanFailure(
-    float fanCommand,
-    float fanRpm)
+bool Diagnostics::checkFanFailure(float fanCommand, float fanRpm)
 {
-    bool faultCondition =
-        (fanCommand > 50.0f)
-        &&
-        (fanRpm < 500.0f);
+    bool faultCondition = (fanCommand > 50.0f) && (fanRpm < 500.0f);
 
     if(faultCondition)
     {
@@ -149,9 +117,7 @@ bool Diagnostics::checkFanFailure(
         m_fanFaultCounter = 0;
     }
 
-    return
-        m_fanFaultCounter
-        > FEEDBACK_LIMIT;
+    return m_fanFaultCounter > FEEDBACK_LIMIT;
 }
 
 bool Diagnostics::checkCoolingIneffective(
@@ -160,15 +126,14 @@ bool Diagnostics::checkCoolingIneffective(
     float pumpRpm,
     float fanRpm)
 {
-    bool coolingHealthy =
-        pumpRpm > 3000.0f &&
-        fanRpm > 2000.0f;
+    bool coolingHealthy = pumpRpm > 3000.0f && fanRpm > 2000.0f;
+    float rise = currentTemp - previousTemp;
+    bool tempRising = (rise) > 0.1f;
 
-    bool tempRising =
-        currentTemp > previousTemp;
+    if (coolingHealthy && tempRising) {m_coolingCounter++;}
+    else{m_coolingCounter = 0;}
 
-    return coolingHealthy &&
-           tempRising;
+    return m_coolingCounter > COOLING_LIMIT;
 }
 
 FaultType Diagnostics::evaluate(
@@ -180,49 +145,34 @@ FaultType Diagnostics::evaluate(
     float fanRpm,
     float dt)
 {
-    float maxTemp =
-        *std::max_element(
-            zoneTemps.begin(),
-            zoneTemps.end());
+    float maxTemp = *std::max_element(zoneTemps.begin(), zoneTemps.end());
 
     if(checkRange(zoneTemps))
     {
         return FaultType::SENSOR_OUT_OF_RANGE;
     }
 
-    if(checkPlausibility(
-        zoneTemps,
-        coolantTemp,
-        dt))
+    if(checkPlausibility(zoneTemps, coolantTemp, dt))
     {
         return FaultType::SENSOR_IMPLAUSIBLE;
     }
 
-    if(checkThermalImbalance(
-        zoneTemps))
+    if(checkThermalImbalance(zoneTemps))
     {
         return FaultType::THERMAL_IMBALANCE;
     }
 
-    if(checkPumpFailure(
-        pumpCommand,
-        pumpRpm))
+    if(checkPumpFailure(pumpCommand, pumpRpm))
     {
         return FaultType::PUMP_FAILURE;
     }
 
-    if(checkFanFailure(
-        fanCommand,
-        fanRpm))
+    if(checkFanFailure(fanCommand, fanRpm))
     {
         return FaultType::FAN_FAILURE;
     }
 
-    if(checkCoolingIneffective(
-        maxTemp,
-        m_previousMaxTemp,
-        pumpRpm,
-        fanRpm))
+    if(checkCoolingIneffective(maxTemp, m_previousMaxTemp, pumpRpm, fanRpm))
     {
         return FaultType::COOLING_INEFFECTIVE;
     }
