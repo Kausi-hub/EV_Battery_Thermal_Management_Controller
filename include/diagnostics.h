@@ -27,7 +27,8 @@ public:
         float fanRpm);
 
     bool checkCoolingIneffective(
-        float maxTemp,
+        float currentTemp,
+        float previousTemp,
         float pumpRpm,
         float fanRpm);
 

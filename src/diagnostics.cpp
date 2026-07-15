@@ -160,37 +160,20 @@ bool Diagnostics::checkFanFailure(
 }
 
 bool Diagnostics::checkCoolingIneffective(
-    float maxTemp,
+    float currentTemp,
+    float previousTemp,
     float pumpRpm,
     float fanRpm)
 {
-    if(m_firstCycle)
-    {
-        return false;
-    }
-
     bool coolingHealthy =
-        pumpRpm > 3000.0f
-        &&
+        pumpRpm > 3000.0f &&
         fanRpm > 2000.0f;
 
     bool tempRising =
-        maxTemp >
-        m_previousMaxTemp;
+        currentTemp > previousTemp;
 
-    if(coolingHealthy &&
-       tempRising)
-    {
-        m_coolingCounter++;
-    }
-    else
-    {
-        m_coolingCounter = 0;
-    }
-
-    return
-        m_coolingCounter
-        > COOLING_LIMIT;
+    return coolingHealthy &&
+           tempRising;
 }
 
 FaultType Diagnostics::evaluate(

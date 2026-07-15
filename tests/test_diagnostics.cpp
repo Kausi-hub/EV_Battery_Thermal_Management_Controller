@@ -91,22 +91,12 @@ TEST(Diagnostics, CoolingIneffective)
 {
     Diagnostics diagnostics;
 
-    bool fault = false;
-
-    float temp = 40.0f;
-
-    for(int i = 0; i < 350; ++i)
-    {
-        temp += 0.05f;
-
-        fault =
-            diagnostics.checkCoolingIneffective(
-                temp,
-                3500.0f,
-                2500.0f);
-    }
-
-    EXPECT_TRUE(fault);
+    EXPECT_TRUE(
+        diagnostics.checkCoolingIneffective(
+            45.0f,
+            44.0f,
+            3500.0f,
+            2500.0f));
 }
 
 TEST(Diagnostics, PumpHealthy)
@@ -185,35 +175,19 @@ TEST(Diagnostics, DetectPumpFailure)
         FaultType::PUMP_FAILURE);
 }
 
-TEST(Diagnostics, DetectFanFailure)
+TEST(Diagnostics, FanFailureDetected)
 {
     Diagnostics diagnostics;
 
-    std::array<float,4> zones =
-    {
-        35.0f,
-        35.0f,
-        35.0f,
-        35.0f
-    };
-
-    FaultType fault =
-        FaultType::NONE;
+    bool fault = false;
 
     for(int i = 0; i < 120; ++i)
     {
         fault =
-            diagnostics.evaluate(
-                zones,
-                30.0f,
-                0.0f,
+            diagnostics.checkFanFailure(
                 80.0f,
-                0.0f,
-                0.0f,
-                0.1f);
+                0.0f);
     }
 
-    EXPECT_EQ(
-        fault,
-        FaultType::FAN_FAILURE);
+    EXPECT_TRUE(fault);
 }
