@@ -28,14 +28,10 @@ m_coolingCounter(0)
 bool Diagnostics::checkRange(
     const std::array<float,4>& zoneTemps)
 {
-    for(float temp : zoneTemps)
+    for (float temp : zoneTemps)
     {
-        if(temp < MIN_VALID_TEMP)
-        {
-            return true;
-        }
-
-        if(temp > MAX_VALID_TEMP)
+        if (temp < MIN_VALID_TEMP ||
+            temp > MAX_VALID_TEMP)
         {
             return true;
         }
