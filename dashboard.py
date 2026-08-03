@@ -13,14 +13,14 @@ st.set_page_config(
     page_icon="🚗",
     layout="wide"
 )
-col1, col2 = st.columns(2)
-with col1: 
-    if st.button("Start Simulation"): requests.post("http://localhost:8000/start")
-with col2: 
-    if st.button("Stop Simulation"): requests.post("https://localhost:8000/stop")
+#col1, col2 = st.columns(2)
+#with col1: 
+#    if st.button("Start Simulation"): requests.post("http://localhost:8000/start")
+#with col2: 
+#    if st.button("Stop Simulation"): requests.post("https://localhost:8000/stop")
 
-response = requests.get("http://localhost:8000/telemetry")
-data = response.json()
+#response = requests.get("http://localhost:8000/telemetry")
+#data = response.json()
 
 # ------------------------------------------------------------------
 # Load Data
