@@ -21,6 +21,21 @@ struct TelemetryRecord
 
     float pumpRpm;
     float fanRpm;
+    float packAverageTemp;
+
+    float maxCellTemp;
+
+    float minCellTemp;
+
+    float cellImbalance;
+
+    float hotspotTemperature;
+
+    std::size_t hotspotModule;
+
+    std::size_t hotspotCell;
+
+    float thermalPropagationIndex;
 
     FaultType fault;
 };

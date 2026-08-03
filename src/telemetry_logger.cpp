@@ -4,8 +4,7 @@
 #include <iostream>
 #include <filesystem>
 
-TelemetryLogger::TelemetryLogger(
-    const std::string& filename)
+TelemetryLogger::TelemetryLogger(const std::string& filename)
 {
     m_file.open(filename);
 
@@ -43,8 +42,7 @@ TelemetryLogger::~TelemetryLogger()
     }
 }
 
-void TelemetryLogger::log(
-    const TelemetryRecord& r)
+void TelemetryLogger::log(const TelemetryRecord& r)
 {
     if (!m_file.is_open()){
         std::cerr << "File not open during log()" << std::endl;
