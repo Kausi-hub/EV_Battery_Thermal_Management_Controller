@@ -8,11 +8,7 @@
 
 enum class ThermalState
 {
-    STARTUP,
-    NORMAL,
-    COOLING,
-    CRITICAL,
-    SAFE
+    STARTUP, NORMAL, COOLING, CRITICAL, SAFE
 };
 
 struct ThermalCommands
@@ -25,39 +21,23 @@ class ThermalController
 {
 public:
 
-    ThermalController(
-        ITemperatureSensor& sensor,
-        IPumpDriver& pump,
-        IFanDriver& fan,
-        const ThermalCalibration& calibration);
-
+    ThermalController(ITemperatureSensor& sensor, IPumpDriver& pump, IFanDriver& fan, const ThermalCalibration& calibration);
     ~ThermalController() = default;
-
-    ThermalCommands update(
-        const ThermalInputs& inputs,
-        float dt);
-
+    ThermalCommands update(const ThermalInputs& inputs, float dt);
     void enterSafeMode();
-
     ThermalState getState() const;
 
 private:
 
-    void updateStateMachine(
-        float maxTemp);
+    void updateStateMachine(float maxTemp);
 
-    float calculateFeedForward(
-        float batteryCurrentA) const;
+    float calculateFeedForward(float batteryCurrentA) const;
 
 private:
 
     ITemperatureSensor& m_sensor;
-
     IPumpDriver& m_pump;
-
     IFanDriver& m_fan;
-
     const ThermalCalibration& m_cal;
-
     ThermalState m_state;
 };

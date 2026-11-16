@@ -8,7 +8,5 @@ void Watchdog::kick(uint32_t currentMs)
 bool Watchdog::expired(
     uint32_t currentMs) const
 {
-    return
-        (currentMs - m_lastKickMs)
-        > 100;
+    return (currentMs - m_lastKickMs)> 100;
 }

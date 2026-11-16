@@ -36,20 +36,11 @@ private:
 
 int main()
 {
-    ThermalCalibration calibration =
-        ConfigLoader::load(
-            "thermal_calibration.txt");
-
+    ThermalCalibration calibration = ConfigLoader::load("thermal_calibration.txt");
     BatteryTemperatureSensor sensor;
     PumpDriver pump;
     FanDriver fan;
-
-    ThermalController controller(
-        sensor,
-        pump,
-        fan,
-        calibration);
-
+    ThermalController controller(sensor,pump, fan, calibration);
     Diagnostics diagnostics;
     CoolantModel coolant;
     Watchdog watchdog;
@@ -57,7 +48,6 @@ int main()
     float batteryTemp = 35.0f;
     float coolantTemp = 25.0f;
     constexpr float thermalMass = 1500.0f;
-
     uint32_t timeMs = 0;
 
     TelemetryLogger logger("telemetry.csv");
@@ -72,57 +62,20 @@ int main()
         watchdog.kick(timeMs);
         float current = (cycle > 200) ? 320.0f : 100.0f;
         ThermalInputs inputs;
-        inputs.zoneTempsC =
-        {
-            batteryTemp,
-            batteryTemp + 0.5f,
-            batteryTemp - 0.4f,
-            batteryTemp + 0.3f
-        };
-
+        inputs.zoneTempsC ={batteryTemp,batteryTemp + 0.5f, batteryTemp - 0.4f, batteryTemp + 0.3f};
         inputs.coolantTempC = coolantTemp;
         inputs.batteryCurrentA = current;
-
         inputs.pumpRpmFeedback = pump.getRpm();
-
         inputs.fanRpmFeedback = fan.getRpm();
-
         auto commands = controller.update(inputs,0.1f);
-
         pump.setSpeed(commands.pumpPercent);
         fan.setSpeed(commands.fanPercent);
-
-        float averageBatteryTemp =
-            (inputs.zoneTempsC[0] +
-             inputs.zoneTempsC[1] +
-             inputs.zoneTempsC[2] +
-             inputs.zoneTempsC[3]) / 4.0f;
-
-        coolantTemp =
-            coolant.update(
-                averageBatteryTemp,
-                commands.pumpPercent,
-                commands.fanPercent,
-                0.1f);
-
-        float heatGeneration =
-            current *
-            current *
-            0.02f *
-            0.0002f;
-
+        float averageBatteryTemp = (inputs.zoneTempsC[0] + inputs.zoneTempsC[1] + inputs.zoneTempsC[2] + inputs.zoneTempsC[3]) / 4.0f;
+        coolantTemp = coolant.update( averageBatteryTemp, commands.pumpPercent, commands.fanPercent, 0.1f);
+        float heatGeneration = current * current * 0.02f * 0.0002f;
         float heatRemoval = (batteryTemp - coolantTemp) * commands.pumpPercent * 0.0005f;
         batteryTemp += (heatGeneration - heatRemoval) * 0.1 /thermalMass;
-
-        auto fault =
-            diagnostics.evaluate(
-                inputs.zoneTempsC,
-                coolantTemp,
-                commands.pumpPercent,
-                commands.fanPercent,
-                pump.getRpm(),
-                fan.getRpm(),
-                0.1f);
+        auto fault = diagnostics.evaluate( inputs.zoneTempsC, coolantTemp, commands.pumpPercent, commands.fanPercent, pump.getRpm(), fan.getRpm(), 0.1f);
 
         if (fault != FaultType::NONE)
         {

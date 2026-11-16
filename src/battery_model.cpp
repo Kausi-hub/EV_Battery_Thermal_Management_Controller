@@ -1,11 +1,7 @@
 #include "battery_model.h"
 #include <cstddef>
 
-BatteryModel::ZoneData BatteryModel::update(
-    const std::array<float, BatteryModel::kNumZones>& currents,
-    float coolantTemp,
-    float pumpPercent,
-    float dt)
+BatteryModel::ZoneData BatteryModel::update( const std::array<float, BatteryModel::kNumZones>& currents, float coolantTemp, float pumpPercent, float dt)
 {
     constexpr float resistance = 0.02f;
     //static constexpr std::size_t kNumZones = 4;

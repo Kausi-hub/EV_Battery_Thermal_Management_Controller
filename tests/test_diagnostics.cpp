@@ -1,5 +1,4 @@
 #include <gtest/gtest.h>
-
 #include "diagnostics.h"
 
 TEST(Diagnostics, FanFailureDetected)
@@ -10,10 +9,7 @@ TEST(Diagnostics, FanFailureDetected)
 
     for(int i = 0; i < 120; ++i)
     {
-        fault =
-            diagnostics.checkFanFailure(
-                80.0f,
-                0.0f);
+        fault = diagnostics.checkFanFailure(80.0f, 0.0f);
     }
 
     EXPECT_TRUE(fault);
@@ -23,68 +19,36 @@ TEST(Diagnostics, ThermalImbalanceDetected)
 {
     Diagnostics diagnostics;
 
-    std::array<float,4> zones
-    {
-        35.0f,
-        35.0f,
-        60.0f,
-        35.0f
-    };
+    std::array<float,4> zones { 35.0f, 35.0f, 60.0f, 35.0f};
 
-    EXPECT_TRUE(
-        diagnostics.checkThermalImbalance(
-            zones));
+    EXPECT_TRUE(diagnostics.checkThermalImbalance(zones));
 }
 
 TEST(Diagnostics, BalancedPack)
 {
     Diagnostics diagnostics;
 
-    std::array<float,4> zones
-    {
-        35.0f,
-        36.0f,
-        35.5f,
-        35.2f
-    };
+    std::array<float,4> zones {35.0f, 36.0f, 35.5f, 35.2f};
 
-    EXPECT_FALSE(
-        diagnostics.checkThermalImbalance(
-            zones));
+    EXPECT_FALSE( diagnostics.checkThermalImbalance(zones));
 }
 
 TEST(Diagnostics, TemperatureOutOfRange)
 {
     Diagnostics diagnostics;
 
-    std::array<float,4> zones
-    {
-        150.0f,
-        35.0f,
-        35.0f,
-        35.0f
-    };
+    std::array<float,4> zones {150.0f, 35.0f, 35.0f, 35.0f};
 
-    EXPECT_TRUE(
-        diagnostics.checkRange(
-            zones));
+    EXPECT_TRUE(diagnostics.checkRange(zones));
 }
 
 TEST(Diagnostics, TemperatureWithinRange)
 {
     Diagnostics diagnostics;
 
-    std::array<float,4> zones
-    {
-        35.0f,
-        35.0f,
-        35.0f,
-        35.0f
-    };
+    std::array<float,4> zones {35.0f, 35.0f, 35.0f, 35.0f};
 
-    EXPECT_FALSE(
-        diagnostics.checkRange(
-            zones));
+    EXPECT_FALSE(diagnostics.checkRange(zones));
 }
 
 TEST(Diagnostics, CoolingIneffective)
@@ -119,60 +83,27 @@ TEST(Diagnostics, DetectThermalImbalance)
 {
     Diagnostics diagnostics;
 
-    std::array<float,4> zones =
-    {
-        35.0f,
-        35.0f,
-        60.0f,
-        35.0f
-    };
+    std::array<float,4> zones = {35.0f, 35.0f, 60.0f, 35.0f};
 
-    auto fault =
-        diagnostics.evaluate(
-            zones,
-            30.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.0f,
-            0.1f);
+    auto fault = diagnostics.evaluate(zones, 30.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.1f);
 
-    EXPECT_EQ(
-        fault,
-        FaultType::THERMAL_IMBALANCE);
+    EXPECT_EQ(fault, FaultType::THERMAL_IMBALANCE);
 }
 
 TEST(Diagnostics, DetectPumpFailure)
 {
     Diagnostics diagnostics;
 
-    std::array<float,4> zones =
-    {
-        35.0f,
-        35.0f,
-        35.0f,
-        35.0f
-    };
+    std::array<float,4> zones = {35.0f, 35.0f, 35.0f, 35.0f};
 
-    FaultType fault =
-        FaultType::NONE;
+    FaultType fault = FaultType::NONE;
 
     for(int i = 0; i < 120; ++i)
     {
         float temp = 35.0f + 0.01f * i;
         std::array<float,4> zones ={temp,temp,temp,temp};
-        fault =
-            diagnostics.evaluate(
-                zones,
-                30.0f,
-                80.0f,
-                0.0f,
-                0.0f,
-                0.0f,
-                0.1f);
+        fault = diagnostics.evaluate(zones, 30.0f, 80.0f, 0.0f, 0.0f, 0.0f, 0.1f);
     }
 
-    EXPECT_EQ(
-        fault,
-        FaultType::PUMP_FAILURE);
+    EXPECT_EQ(fault, FaultType::PUMP_FAILURE);
 }

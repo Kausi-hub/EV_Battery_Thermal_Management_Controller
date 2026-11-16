@@ -1,5 +1,4 @@
 #include "BatteryPack.h"
-
 #include <algorithm>
 #include <vector>
 
@@ -39,9 +38,7 @@ void BatteryPack::update(float packCurrent, float coolantTemp, float pumpPercent
     for(auto& module : m_modules)
     {
         auto cellTemps = module.getCellTemperatures();
-
         m_heatNetwork.calculateThermalCoupling(cellTemps, dt);
-
         module.applyCellTemperatures(cellTemps);
     }
 
@@ -67,7 +64,6 @@ void BatteryPack::update(float packCurrent, float coolantTemp, float pumpPercent
     for(std::size_t i = 0; i < m_modules.size(); ++i)
     {
         float delta = moduleTemps[i] - m_modules[i].getAverageTemperature();
-
         auto cellTemps = m_modules[i].getCellTemperatures();
 
         for(auto& t : cellTemps)
@@ -95,7 +91,6 @@ void BatteryPack::update(float packCurrent, float coolantTemp, float pumpPercent
             if(temp > maxTemp)
             {
                 maxTemp = temp;
-
                 m_hotspot.moduleIdx = m;
                 m_hotspot.cellIdx = c;
                 m_hotspot.temperature = temp;

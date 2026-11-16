@@ -7,9 +7,7 @@ class Watchdog
 public:
 
     void kick(uint32_t currentMs);
-
-    bool expired(
-        uint32_t currentMs) const;
+    bool expired(uint32_t currentMs) const;
 
 private:
 

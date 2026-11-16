@@ -7,12 +7,7 @@
 
 namespace
 {
-PidController g_pid(
-    2.0f,
-    0.1f,
-    0.05f,
-    0.0f,
-    100.0f);
+PidController g_pid(2.0f, 0.1f, 0.05f, 0.0f, 100.0f);
 
 struct PIDGains
 {
@@ -126,10 +121,7 @@ void ThermalController::updateStateMachine(float maxTemp)
 
 ThermalCommands ThermalController::update(const ThermalInputs& inputs, float dt)
 {
-    float maxTemp =
-        *std::max_element(
-            inputs.zoneTempsC.begin(),
-            inputs.zoneTempsC.end());
+    float maxTemp = *std::max_element(inputs.zoneTempsC.begin(), inputs.zoneTempsC.end());
 
     updateStateMachine(maxTemp);
 
@@ -148,25 +140,13 @@ ThermalCommands ThermalController::update(const ThermalInputs& inputs, float dt)
 
     auto gains = selectGains(maxTemp);
 
-    g_pid.setGains(
-        gains.kp,
-        gains.ki,
-        gains.kd);
+    g_pid.setGains(gains.kp, gains.ki, gains.kd);
 
-    float pidDemand =
-        g_pid.update(
-            m_cal.targetTemp,
-            maxTemp,
-            dt);
+    float pidDemand = g_pid.update(m_cal.targetTemp, maxTemp, dt);
 
-    float ffDemand =
-        calculateFeedForward(
-            inputs.batteryCurrentA);
+    float ffDemand = calculateFeedForward( inputs.batteryCurrentA);
 
-    float demand = std::clamp(
-        pidDemand + ffDemand,
-        0.0f,
-        100.0f);
+    float demand = std::clamp(pidDemand + ffDemand, 0.0f, 100.0f);
 
     switch (m_state)
     {

@@ -1,5 +1,4 @@
 #include "telemetry_logger.h"
-
 #include <fstream>
 #include <iostream>
 #include <filesystem>

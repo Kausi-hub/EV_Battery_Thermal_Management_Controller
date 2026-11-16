@@ -1,5 +1,4 @@
 #include "HeatNetwork.h"
-
 #include <vector>
 
 void HeatNetwork::calculateThermalCoupling(std::vector<float>& temperatures, float dt)

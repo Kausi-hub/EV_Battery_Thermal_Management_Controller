@@ -9,10 +9,7 @@ Module::Module(std::size_t numCells)
 
     for (std::size_t i = 0; i < numCells; ++i)
     {
-        m_cells.emplace_back(
-            5.0f,   // capacity (Ah)
-            0.002f  // internal resistance
-        );
+        m_cells.emplace_back( 5.0f, 0.002f ); // capacity (Ah), // internal resistance
     }
 }
 
@@ -32,8 +29,7 @@ std::vector<float> Module::getCellTemperatures() const
 
     for(const auto& cell : m_cells)
     {
-        temps.push_back(
-            cell.getTemperature());
+        temps.push_back(cell.getTemperature());
     }
 
     return temps;
@@ -93,12 +89,8 @@ const std::vector<Cell>& Module::getCells() const
 void Module::applyCellTemperatures(
     const std::vector<float>& temps)
 {
-    for(std::size_t i = 0;
-        i < m_cells.size() &&
-        i < temps.size();
-        ++i)
+    for(std::size_t i = 0; i < m_cells.size() && i < temps.size(); ++i)
     {
-        m_cells[i].setTemperature(
-            temps[i]);
+        m_cells[i].setTemperature(temps[i]);
     }
 }

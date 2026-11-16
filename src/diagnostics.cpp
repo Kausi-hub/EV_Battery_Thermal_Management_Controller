@@ -80,11 +80,8 @@ bool Diagnostics::checkThermalImbalance(
     const std::array<float,4>& zoneTemps)
 {
     float minTemp = *std::min_element(zoneTemps.begin(), zoneTemps.end());
-
     float maxTemp = *std::max_element(zoneTemps.begin(), zoneTemps.end());
-
-    return
-        (maxTemp - minTemp) > MAX_ZONE_DELTA;
+    return (maxTemp - minTemp) > MAX_ZONE_DELTA;
 }
 
 bool Diagnostics::checkPumpFailure(float pumpCommand, float pumpRpm)
@@ -100,8 +97,7 @@ bool Diagnostics::checkPumpFailure(float pumpCommand, float pumpRpm)
         m_pumpFaultCounter = 0;
     }
 
-    return
-        m_pumpFaultCounter > FEEDBACK_LIMIT;
+    return m_pumpFaultCounter > FEEDBACK_LIMIT;
 }
 
 bool Diagnostics::checkFanFailure(float fanCommand, float fanRpm)
@@ -136,14 +132,7 @@ bool Diagnostics::checkCoolingIneffective(
     return m_coolingCounter > COOLING_LIMIT;
 }
 
-FaultType Diagnostics::evaluate(
-    const std::array<float,4>& zoneTemps,
-    float coolantTemp,
-    float pumpCommand,
-    float fanCommand,
-    float pumpRpm,
-    float fanRpm,
-    float dt)
+FaultType Diagnostics::evaluate( const std::array<float,4>& zoneTemps, float coolantTemp, float pumpCommand, float fanCommand, float pumpRpm, float fanRpm, float dt)
 {
     float maxTemp = *std::max_element(zoneTemps.begin(), zoneTemps.end());
 

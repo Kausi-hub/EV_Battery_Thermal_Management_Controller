@@ -3,8 +3,7 @@
 FaultType FaultManager::evaluate(
     float temp)
 {
-    if (temp < -40.0f ||
-        temp > 120.0f)
+    if (temp < -40.0f || temp > 120.0f)
     {
         return FaultType::SENSOR_OUT_OF_RANGE;
     }

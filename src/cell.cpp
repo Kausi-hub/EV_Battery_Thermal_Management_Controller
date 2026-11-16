@@ -1,8 +1,6 @@
 #include "Cell.h"
 
-Cell::Cell(float capacityAh, float internalResistance)
-    : m_capacityAh(capacityAh),
-      m_internalResistance(internalResistance)
+Cell::Cell(float capacityAh, float internalResistance) : m_capacityAh(capacityAh), m_internalResistance(internalResistance)
 {
 }
 

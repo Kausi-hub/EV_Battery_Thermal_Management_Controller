@@ -18,11 +18,8 @@ public:
         float dt);
 
     float getPackAverageTemp() const;
-
     float getMaxTemperature() const;
-
     float getCellImbalance() const;
-
     bool detectThermalPropagation() const;
     struct Hotspot
     {
